@@ -3,5 +3,6 @@ CREATE TABLE IF NOT EXISTS inquiries (
   name VARCHAR(120) NOT NULL,
   phone VARCHAR(30) NOT NULL,
   message TEXT NOT NULL DEFAULT '',
+  color_choice SMALLINT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
