@@ -4,5 +4,11 @@ CREATE TABLE IF NOT EXISTS inquiries (
   phone VARCHAR(30) NOT NULL,
   message TEXT NOT NULL DEFAULT '',
   color_choice SMALLINT,
+  quantity SMALLINT NOT NULL DEFAULT 1,
+  delivery_zone VARCHAR(30) NOT NULL DEFAULT 'inside-dhaka',
+  payment_method VARCHAR(20) NOT NULL DEFAULT 'cod',
+  unit_price INTEGER NOT NULL DEFAULT 1550,
+  delivery_fee INTEGER NOT NULL DEFAULT 80,
+  status VARCHAR(20) NOT NULL DEFAULT 'pending',
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );

@@ -8,7 +8,8 @@ Bangladeshi local sari-business landing page built with Next.js and PostgreSQL.
 2. Copy config: `cp .env.example .env.local`
 3. Run the single web server: `npm run dev`
 4. Visit `http://localhost:3000` — the API is `POST /api/inquiries` on the same port.
+5. Open `http://localhost:3000/admin` to manage orders. Set `ADMIN_USERNAME` and `ADMIN_PASSWORD` in `.env.local` to enable the protected admin panel.
 
 ## Production
 
-Run `npm run build && npm start`. Set `DATABASE_URL` in your deployment environment.
+Run `npm run build && npm start`. Set `DATABASE_URL`, `ADMIN_USERNAME`, and `ADMIN_PASSWORD` in your deployment environment.

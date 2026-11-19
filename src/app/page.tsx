@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
 import color1 from "../color-img/1.jpg";
 import color2 from "../color-img/2.jpg";
 import color3 from "../color-img/3.jpg";
@@ -31,7 +32,8 @@ const features = [
 ];
 
 export default function Home() {
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const router = useRouter();
+  const [status, setStatus] = useState<"idle" | "sending" | "error">("idle");
   const [colorChoice, setColorChoice] = useState(1);
   const [quantity, setQuantity] = useState(1);
   const [deliveryZone, setDeliveryZone] = useState<"inside-dhaka" | "outside-dhaka">("inside-dhaka");
@@ -51,10 +53,10 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      if (!response.ok) throw new Error("Request failed");
-      setStatus("sent");
-      form.reset();
-      setQuantity(1);
+      const result = await response.json();
+      if (!response.ok || !result.order) throw new Error("Request failed");
+      window.sessionStorage.setItem("last-order-confirmation", JSON.stringify(result.order));
+      router.push("/thank-you");
     } catch {
       setStatus("error");
     }
@@ -133,8 +135,7 @@ export default function Home() {
           <input type="hidden" name="quantity" value={quantity} />
           <fieldset className="payment-method"><legend>পেমেন্ট পদ্ধতি</legend><label><input type="radio" name="payment" value="cod" defaultChecked /> ক্যাশ অন ডেলিভারি <small>পণ্য হাতে পেয়ে পেমেন্ট করুন</small></label><label><input type="radio" name="payment" value="bkash" /> বিকাশে Payment করুন <span className="bkash-mark">bKash</span></label></fieldset>
           <button className="button primary order-submit" disabled={status === "sending"}>{status === "sending" ? "অর্ডার নেওয়া হচ্ছে..." : "অর্ডার কনফার্ম করুন"}<span>→</span></button>
-          {status === "sent" && <p className="form-ok">ধন্যবাদ! আপনার অর্ডারের জন্য শিগগিরই যোগাযোগ করা হবে।</p>}
-          {status === "error" && <p className="form-error">দুঃখিত, অর্ডার পাঠানো যায়নি। আবার চেষ্টা করুন।</p>}
+          {status === "error" && <p className="form-error">দুঃখিত, অর্ডারটি সংরক্ষণ করা যায়নি। আপনার ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন, অথবা আমাদের ফোন করুন।</p>}
         </form>
       </section>
 
